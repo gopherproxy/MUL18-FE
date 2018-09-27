@@ -2,9 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <style>
-	.form-error{
-		color: red;
+	.hidden {
+		display: none;
 	}
 </style>
 <title>Guess it, win or loose!</title>
@@ -23,7 +25,8 @@
 		// formvalidator setup function
 		$.validate({
 			// language object overwritten by custom language object
-    		language : myErrorFeedback
+    		language : myErrorFeedback,
+			inputParentClassOnError : 'alert alert-danger' // <- assigning Bootstrap's alert classes to error message container
   		});
   	//prevent form submission
     $("form").submit(function(event){
@@ -38,17 +41,36 @@
 </head>
 
 <body>
-<h1>Guess a number!</h1>
-
-<p id="output">I am thinking of a number between 0 and 10...</p>
-<p>Try and guess my magic number - you have 3 attempts!</p>
-
-<form method="post">
-  <input id="guess" type= "number" data-validation="number" data-validation-allowing="range[0;10]" data-validation-error-msg-container="#error-dialog" placeholder="Enter your guess..." autofocus>
-  <button id="play">Guess the magic number!</button>
-  <!-- custom placement of error dialog -->
-  <div id="error-dialog"></div>
-</form>
+<div class="container"> 
+  <!-- "Hero" unit -->
+  <div class="jumbotron">
+    <h1 class="display-4">Guess a number!</h1>
+  </div>
+  <!-- main content -->
+  <div class="row"> 
+    <!-- 2 columns, reordered on medium devices and up --> 
+    <!-- First column -->
+    <div class="col-lg-6 order-md-2">
+      <div id="output" class="text-center alert alert-success" role="alert">I am thinking of a number between 0 and 10...</div>
+      <form method="post">
+        <div class="input-group">
+          <div class="input-group-prepend"> <span class="input-group-text">Number from 0-10:</span> </div>
+          <input id="guess" class="form-control" data-validation="number" data-validation-allowing="range[0;10]" data-validation-error-msg-container="#error-dialog" placeholder="Enter your guess..." autofocus>
+        </div>
+        <!-- http://www.formvalidator.net/#configuration_position -->
+        <div id="error-dialog" class="mt-3"></div>
+        <button id="play" class="mt-3 mb-3 p-3 btn btn-secondary">Guess the magic number!</button>
+      </form>
+      <!-- should be outside the form -->
+      <button id="playAgain" class="mt-3 mb-3 p-3 btn btn-secondary hidden">Play again!</button>
+    </div>
+    <!-- Second column -->
+    <div class="col-lg-6 order-md-1">
+      <div class="text-center">Try and guess the magic number - you have 3 attempts!</div>
+    </div>
+  </div>
+  <!-- Container end --> 
+</div>
 <script>
 	
 /* 
@@ -73,7 +95,8 @@ console.log(magicNumber);
 //The game "controls"
 input = document.getElementById("guess");
 output = document.getElementById("output");
-button = document.getElementById("play");
+button = document.getElementById("playAgain");
+button.addEventListener('click', playAgain);
 	
 //Game state variable
 guessesRemaining = 3;
@@ -98,13 +121,14 @@ function playGame(){
 		input.focus();
 	} else if(playersGuess === magicNumber){
 		output.innerHTML = 'You got it! ' + playersGuess + ' is the magic number!';
+		endGame();
 	} 
 	// last attempt
 	if(guessesRemaining === 0 && playersGuess === magicNumber){
-		output.innerHTML = 'Yes - in the final attempt!';
+		output.innerHTML = 'Yes - in the final attempt! ' + playersGuess + ' is the magic number!';
 		endGame();
 	} else if(guessesRemaining === 0){
-		output.innerHTML = 'Sorry - no more guesses left. Game over.';
+		output.innerHTML = 'Sorry - no more guesses left. The magic number was ' + magicNumber + '. Game over.';
 		endGame();
 	}
 	
@@ -112,9 +136,14 @@ function playGame(){
 	
 function endGame(){	
 	// disabling all game controls
-	//alert('Game over!');
-	button.disabled = true;
+	$("#playAgain").removeClass("hidden");
+	$("#play").addClass("hidden");
+	//Disable the input field
 	input.disabled = true;
+}
+	
+function playAgain(){
+	window.location.reload(true);
 }
 </script>
 </body>
