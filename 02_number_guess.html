@@ -10,7 +10,7 @@
   	//prevent form submission
     $("form").submit(function(event){
 		//console.log('Form not submitted!');
-		playgame();
+		playGame();
 		
         event.preventDefault();
     });
@@ -78,13 +78,23 @@ function playGame(){
 		input.focus();
 	} else if(playersGuess === magicNumber){
 		output.innerHTML = 'You got it! ' + playersGuess + ' is the magic number!';
+	} 
+	// last attempt
+	if(guessesRemaining === 0 && playersGuess === magicNumber){
+		output.innerHTML = 'Yes - in the final attempt!';
+		endGame();
+	} else if(guessesRemaining === 0){
+		output.innerHTML = 'Sorry - no more guesses left. Game over.';
+		endGame();
 	}
 	
 }// end function
 	
 function endGame(){	
 	// disabling all game controls
-
+	//alert('Game over!');
+	button.disabled = true;
+	input.disabled = true;
 }
 </script>
 </body>
