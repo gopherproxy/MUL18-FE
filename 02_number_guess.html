@@ -2,11 +2,29 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<style>
+	.form-error{
+		color: red;
+	}
+</style>
 <title>Guess it, win or loose!</title>
+<!-- loading jQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- loading formvalidator plugin (formvalidator.net) -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
 <script>
 	
 	$( document ).ready(function() {
+		// form validering
+		// custom language object
+		var myErrorFeedback = {
+			badInt: 'Please enter a number between 0-10.'
+		}
+		// formvalidator setup function
+		$.validate({
+			// language object overwritten by custom language object
+    		language : myErrorFeedback
+  		});
   	//prevent form submission
     $("form").submit(function(event){
 		//console.log('Form not submitted!');
@@ -26,8 +44,10 @@
 <p>Try and guess my magic number - you have 3 attempts!</p>
 
 <form method="post">
-  <input id="guess" placeholder="Enter your guess..." autofocus>
+  <input id="guess" type= "number" data-validation="number" data-validation-allowing="range[0;10]" data-validation-error-msg-container="#error-dialog" placeholder="Enter your guess..." autofocus>
   <button id="play">Guess the magic number!</button>
+  <!-- custom placement of error dialog -->
+  <div id="error-dialog"></div>
 </form>
 <script>
 	
