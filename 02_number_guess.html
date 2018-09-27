@@ -3,6 +3,20 @@
 <head>
 <meta charset="utf-8">
 <title>Guess it, win or loose!</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+	
+	$( document ).ready(function() {
+  	//prevent form submission
+    $("form").submit(function(event){
+		//console.log('Form not submitted!');
+		playgame();
+		
+        event.preventDefault();
+    });
+});
+	
+</script>
 </head>
 
 <body>
@@ -33,7 +47,7 @@ Things to improve ;-):
 //Global game variables
 var magicNumber, input, output, button, playersGuess, guessesRemaining;
 	
-magicNumber = 6;
+magicNumber = Math.floor(Math.random() * 11); // random number 0-10
 console.log(magicNumber);
 	
 //The game "controls"
@@ -46,9 +60,27 @@ guessesRemaining = 3;
 	
 function playGame(){
 	// core functionality:
-	// analyzing the player's guess (i.e. the variable playersGuess!)
     // handling the game statistics (guessesRemaining)
-}
+	playersGuess = parseInt(input.value); // converting string input to number!
+	//console.log(playersGuess);
+	// countdown
+	guessesRemaining -= 1;
+	// analyzing the player's guess (i.e. the variable playersGuess!)
+	if(playersGuess < magicNumber){
+		output.innerHTML = playersGuess + ' is too low! ' + guessesRemaining + ' guesses left.';
+		// clear the input field
+		input.value = '';
+		// autofocus
+		input.focus();
+	} else if(playersGuess > magicNumber){
+		output.innerHTML = playersGuess + ' is too high!' + guessesRemaining + ' guesses left.';
+		input.value = '';
+		input.focus();
+	} else if(playersGuess === magicNumber){
+		output.innerHTML = 'You got it! ' + playersGuess + ' is the magic number!';
+	}
+	
+}// end function
 	
 function endGame(){	
 	// disabling all game controls
