@@ -47,9 +47,27 @@
 	// global game variables
 	var player, fields, fieldsPlayed, fieldsPlayer0, fieldsPlayer1, msg;
 	
+	player = 1;
+	
+	// make all fields clickable
+	fields = document.getElementsByTagName('td');
+	
+	for(let i = 0; i < fields.length; i++  ){
+		fields[i].addEventListener('click', play);
+	}
+	
 	function play(){
 		// game core mechanics, marking the fields
+		console.log('play!');
 		
+		if(player === 1){
+		// this addresses the "owner" of the function, i.e. <td>
+		this.innerHTML = 'X';
+		player = 2;
+		} else if(player === 2){
+			this.innerHTML = '0';
+			player = 1;
+		}
 	}
 		
 	function win(){
