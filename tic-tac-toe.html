@@ -45,9 +45,14 @@
 	*/
 	
 	// global game variables
-	var player, fields, fieldsPlayed, fieldsPlayer0, fieldsPlayer1, msg;
+	var player, fields, fieldsPlayed, fieldsPlayer1, fieldsPlayer2, msg;
 	
 	player = 1;
+	// an array for all played fields
+	fieldsPlayed = [];
+	// arrays for each player
+	fieldsPlayer1 = [];
+	fieldsPlayer2 = [];
 	
 	// make all fields clickable
 	fields = document.getElementsByTagName('td');
@@ -56,22 +61,52 @@
 		fields[i].addEventListener('click', play);
 	}
 	
+	msg = document.getElementById('msg');
+	
 	function play(){
 		// game core mechanics, marking the fields
-		console.log('play!');
+		//console.log('play!');
+		if(fieldsPlayed.includes(this.id)){
+			alert('Field already taken!');
+		}
 		
-		if(player === 1){
+		if(player === 1 && !fieldsPlayed.includes(this.id)){
 		// this addresses the "owner" of the function, i.e. <td>
 		this.innerHTML = 'X';
+		this.style.color = 'blue';
+		fieldsPlayer1.push(parseInt(this.id));
+		console.log('Player 1 played ' + fieldsPlayer1.toString());
 		player = 2;
-		} else if(player === 2){
+		} else if(player === 2 && !fieldsPlayed.includes(this.id)){
 			this.innerHTML = '0';
+			this.style.color = 'red';
+			fieldsPlayer2.push(parseInt(this.id));
+			console.log('Player 2 played ' + fieldsPlayer2.toString());
 			player = 1;
 		}
+		// checking for a winning combination
+		win();
+		// store field in array
+		fieldsPlayed.push(this.id);
+		console.log(this.id + ' clicked!');
 	}
 		
 	function win(){
 		// analyzing field choices, winning conditions, feedback
+		if(
+			fieldsPlayer1.includes(1) && fieldsPlayer1.includes(4) && fieldsPlayer1.includes(7) ||
+			fieldsPlayer1.includes(1) && fieldsPlayer1.includes(2) && fieldsPlayer1.includes(3)
+			
+		)
+			{
+			msg.innerHTML = "Player 1 won!";
+		} else if (
+			fieldsPlayer2.includes(1) && fieldsPlayer2.includes(4) && fieldsPlayer2.includes(7) ||
+			fieldsPlayer2.includes(1) && fieldsPlayer2.includes(2) && fieldsPlayer2.includes(3)
+		)
+			{
+			msg.innerHTML = "Player 2 won!";		
+		}
 	}
 
 	function gameOver(){
