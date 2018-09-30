@@ -2,38 +2,97 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<style>
+.hidden {
+		display: none;
+	}
+table {
+	width: 100%;
+	border-collapse: collapse;
+	background-color: #D7CFCF;
+}
+td {
+	border: 6px solid white;
+	width: 33.333%;
+	font-family: "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, "sans-serif";
+	text-align: center;
+	font-size: 5em;
+	vertical-align: middle;
+}
+/* https://spin.atomicobject.com/2015/07/14/css-responsive-square/ */
+td:after {
+	content: "";
+	display: block;
+	padding-bottom: 10%;
+}
+td:first-of-type {
+	border-left-color: transparent;
+	border-top-color: transparent;
+}
+td:nth-of-type(2) {
+	border-top-color: transparent;
+}
+td:nth-of-type(3) {
+	border-right-color: transparent;
+	border-top-color: transparent;
+}
+tr:nth-of-type(3) td {
+	border-bottom-color: transparent;
+}
+</style>
 <title>Tic Tac Toe</title>
 </head>
 
 <body>
-<h1>TIC TAC TOE, 2 player</h1>
-<table width="400" border="1">
-  <tbody>
-    <tr>
-      <td id="1">&nbsp;</td>
-      <td id="2">&nbsp;</td>
-      <td id="3">&nbsp;</td>
-    </tr>
-    <tr>
-      <td id="4">&nbsp;</td>
-      <td id="5">&nbsp;</td>
-      <td id="6">&nbsp;</td>
-    </tr>
-    <tr>
-      <td id="7">&nbsp;</td>
-      <td id="8">&nbsp;</td>
-      <td id="9">&nbsp;</td>
-    </tr>
-  </tbody>
-</table>
-<h2 id="msg">Click fields to play!</h2>
+<div class="container"> 
+  <!-- "Hero" unit -->
+  <div class="jumbotron">
+    <h1 class="display-4 text-center">TIC TAC TOE</h1>
+  </div>
+  <!-- main content -->
+  <div class="row"> 
+    <!-- 2 columns, reordered on medium devices and up --> 
+    <!-- First column -->
+    <div class="col-lg-6 order-lg-2">
+      <table>
+        <tbody>
+          <tr>
+            <td id="1">&nbsp;</td>
+            <td id="2">&nbsp;</td>
+            <td id="3">&nbsp;</td>
+          </tr>
+          <tr>
+            <td id="4">&nbsp;</td>
+            <td id="5">&nbsp;</td>
+            <td id="6">&nbsp;</td>
+          </tr>
+          <tr>
+            <td id="7">&nbsp;</td>
+            <td id="8">&nbsp;</td>
+            <td id="9">&nbsp;</td>
+          </tr>
+        </tbody>
+      </table>
+      <div id="msg" class="text-center alert alert-success" role="alert">Click fields to play!</div>
+      <button id="playAgain" class="mt-3 mb-3 p-3 btn btn-secondary hidden">Play it again, Sam!</button>
+    </div>
+    <!-- Second column -->
+    <div class="col-lg-6 order-lg-1">
+      <div class="text-center">2 Player version</div>
+      <div class="text-center mt-3"><a href="index.html">Guess a number</a></div>
+    </div>
+  </div>
+  <!-- Container end --> 
+</div>
 <script>
 	
 	/*
 	
 	Stuff to handle ;-):
 	1. Make the fields clickable (player0 uses "X", player1 "0")
-	2. Keep track of all used fields (fieldsPlayed) and of the fields each player chose (fieldsPlayer0, fieldsPlayer1)
+	2. Keep track of all used fields (fieldsPlayed) and of the fields each player chose (fieldsPlayer1, fieldsPlayer2)
 	3. Avoid that úsed fields can be played again and implement feedback like "Field already taken" (alert();)
 	4. Check for winning combinations
 	5. Implement feedback to the players (winning or game is a draw)
@@ -45,7 +104,7 @@
 	*/
 	
 	// global game variables
-	var player, fields, fieldsPlayed, fieldsPlayer1, fieldsPlayer2, msg;
+	var player, fields, fieldsPlayed, fieldsPlayer1, fieldsPlayer2, winningFields, msg, playButton;
 	
 	player = 1;
 	// an array for all played fields
@@ -62,6 +121,9 @@
 	}
 	
 	msg = document.getElementById('msg');
+	// Play again:
+	playButton = document.getElementById("playAgain");
+	playButton.addEventListener('click', playAgain);
 	
 	function play(){
 		// game core mechanics, marking the fields
@@ -73,49 +135,77 @@
 		if(player === 1 && !fieldsPlayed.includes(this.id)){
 		// this addresses the "owner" of the function, i.e. <td>
 		this.innerHTML = 'X';
-		this.style.color = 'blue';
+		this.style.color = 'white';
 		fieldsPlayer1.push(parseInt(this.id));
 		console.log('Player 1 played ' + fieldsPlayer1.toString());
 		player = 2;
 		} else if(player === 2 && !fieldsPlayed.includes(this.id)){
 			this.innerHTML = '0';
-			this.style.color = 'red';
+			this.style.color = 'darkturquoise';
 			fieldsPlayer2.push(parseInt(this.id));
 			console.log('Player 2 played ' + fieldsPlayer2.toString());
 			player = 1;
 		}
-		// checking for a winning combination
-		win();
 		// store field in array
 		fieldsPlayed.push(this.id);
-		console.log(this.id + ' clicked!');
+		//console.log(this.id + ' clicked!');
+		// checking for a winning combination
+		win();
 	}
 		
 	function win(){
 		// analyzing field choices, winning conditions, feedback
 		if(
-			fieldsPlayer1.includes(1) && fieldsPlayer1.includes(4) && fieldsPlayer1.includes(7) ||
-			fieldsPlayer1.includes(1) && fieldsPlayer1.includes(2) && fieldsPlayer1.includes(3)
-			
+			// player 1 winners
+			fieldsPlayer1.includes(1) && fieldsPlayer1.includes(2) && fieldsPlayer1.includes(3) ||
+		  	fieldsPlayer1.includes(4) && fieldsPlayer1.includes(5) && fieldsPlayer1.includes(6) ||
+		  	fieldsPlayer1.includes(7) && fieldsPlayer1.includes(8) && fieldsPlayer1.includes(9) ||
+		  	fieldsPlayer1.includes(1) && fieldsPlayer1.includes(5) && fieldsPlayer1.includes(9) ||
+		  	fieldsPlayer1.includes(3) && fieldsPlayer1.includes(5) && fieldsPlayer1.includes(7)	||
+		  	fieldsPlayer1.includes(1) && fieldsPlayer1.includes(4) && fieldsPlayer1.includes(7) ||
+		  	fieldsPlayer1.includes(2) && fieldsPlayer1.includes(5) && fieldsPlayer1.includes(8) ||
+		  	fieldsPlayer1.includes(3) && fieldsPlayer1.includes(6) && fieldsPlayer1.includes(9)	
 		)
 			{
 			msg.innerHTML = "Player 1 won!";
+			gameOver()
 		} else if (
-			fieldsPlayer2.includes(1) && fieldsPlayer2.includes(4) && fieldsPlayer2.includes(7) ||
-			fieldsPlayer2.includes(1) && fieldsPlayer2.includes(2) && fieldsPlayer2.includes(3)
+			// player 2 winners
+			fieldsPlayer2.includes(1) && fieldsPlayer2.includes(2) && fieldsPlayer2.includes(3) ||
+		  	fieldsPlayer2.includes(4) && fieldsPlayer2.includes(5) && fieldsPlayer2.includes(6) ||
+		  	fieldsPlayer2.includes(7) && fieldsPlayer2.includes(8) && fieldsPlayer2.includes(9) ||
+		  	fieldsPlayer2.includes(1) && fieldsPlayer2.includes(5) && fieldsPlayer2.includes(9) ||
+		  	fieldsPlayer2.includes(3) && fieldsPlayer2.includes(5) && fieldsPlayer2.includes(7) ||
+		  	fieldsPlayer2.includes(1) && fieldsPlayer2.includes(4) && fieldsPlayer2.includes(7) ||
+		  	fieldsPlayer2.includes(2) && fieldsPlayer2.includes(5) && fieldsPlayer2.includes(8) ||
+		  	fieldsPlayer2.includes(3) && fieldsPlayer2.includes(6) && fieldsPlayer2.includes(9)
 		)
 			{
-			msg.innerHTML = "Player 2 won!";		
+			msg.innerHTML = "Player 2 won!";
+			gameOver()
+		} else if (
+			// game is a draw
+			fieldsPlayed.length === 9
+		)
+			{
+			msg.innerHTML = "Game is a draw!";
+			gameOver()
 		}
 	}
 
 	function gameOver(){
-		// ending the game 
-	
+		// ending the game
+		// removing ALL event listeners
+		 for (var i = 0; i < fields.length; i++) {
+			fields[i].removeEventListener('click', play); 
+		}
+		// activate the play again button, JS style (% jQuery)
+		playButton.classList.remove("hidden");
 	}
 	
 	function playAgain(){
 		// restart the game
+		window.location.reload(true);
 	}
 	
 	function gameStats(){
