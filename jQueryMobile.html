@@ -1,15 +1,48 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <title>jQuery Mobile</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<style>
+.ui-footer {
+	position: absolute !important;
+	bottom: 0;
+	width: 100%;
+}
+</style>
 </head>
 
 <body>
-<h1>Welcome</h1>
-<p> Welcome to our first mobile web site. It's going to be the best site
-  you've ever seen. Once we get some content. And a business plan. But the
-  hard part is done! </p>
-<p> <i>Copyright Megacorp &copy; 2018</i> </p>
+<div data-role="page" id="homepage"> <!-- jQuery mobile container -->
+  <div data-role="header">
+    <h1>Home</h1>
+  </div>
+  <div role="main" class="ui-content"> <!-- main content container -->
+    <p> Welcome to our first mobile web site. It's going to be the best site
+      you've ever seen. Once we get some content. And a business plan. But the
+      hard part is done! </p>
+    <p><a href="#aboutpage" data-role="button" data-transition="slide">Read more about Megacorp</a></p>
+  </div>
+  <div data-role="footer">
+    <p> <i>Copyright Megacorp &copy; 2018</i> </p>
+  </div>
+</div>
+<!-- end homepage --> 
+<!-- start aboutpage -->
+<div data-role="page" id="aboutpage">
+  <div data-role="header"> <a href="#homepage" data-transition="slide" data-direction="reverse">Home</a>
+    <h1>About Megacorp</h1>
+    <a href="contact.html" data-transition="slide">Contact</a> </div>
+  <div role="main" class="ui-content"> <!-- main content container -->
+    <p> This is all about us!</p>
+  </div>
+  <div data-role="footer" class="ui-footer">
+    <p> <i>Copyright Megacorp &copy; 2018</i> </p>
+  </div>
+</div>
 </body>
 </html>
