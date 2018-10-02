@@ -81,6 +81,11 @@ tr:nth-of-type(3) td {
     <!-- Second column -->
     <div class="col-lg-6 order-lg-1">
       <div class="text-center">2 Player version</div>
+      <hr>
+      <p>Player 1 score: <span id="player1"></span></p>
+      <p>Player 2 score: <span id="player2"></span></p>
+      <p>Draw: <span id="draw"></span></p>
+      <hr>
       <div class="text-center mt-3"><a href="index.html">Guess a number</a></div>
     </div>
   </div>
@@ -105,6 +110,8 @@ tr:nth-of-type(3) td {
 	
 	// global game variables
 	var player, fields, fieldsPlayed, fieldsPlayer1, fieldsPlayer2, winningFields, msg, playButton;
+	// global statistics variables
+	var p1Stats, p2Stats, drawStats;
 	
 	player = 1;
 	// an array for all played fields
@@ -124,6 +131,10 @@ tr:nth-of-type(3) td {
 	// Play again:
 	playButton = document.getElementById("playAgain");
 	playButton.addEventListener('click', playAgain);
+	
+	p1Stats = document.getElementById('player1');
+	p2Stats = document.getElementById('player2');
+	drawStats = document.getElementById('draw');
 	
 	function play(){
 		// game core mechanics, marking the fields
@@ -168,6 +179,11 @@ tr:nth-of-type(3) td {
 		)
 			{
 			msg.innerHTML = "Player 1 won!";
+			// statistics update
+			let player1score = localStorage.getItem('player1'); // get the value from local storage
+			player1score++; // increment the value
+			localStorage.setItem('player1',player1score); // submit the value to local storage
+			
 			gameOver()
 		} else if (
 			// player 2 winners
@@ -182,6 +198,10 @@ tr:nth-of-type(3) td {
 		)
 			{
 			msg.innerHTML = "Player 2 won!";
+			let player2score = localStorage.getItem('player2'); // get the value from local storage
+			player2score++; // increment the value
+			localStorage.setItem('player2',player2score); // submit the value to local storage
+			
 			gameOver()
 		} else if (
 			// game is a draw
@@ -189,6 +209,10 @@ tr:nth-of-type(3) td {
 		)
 			{
 			msg.innerHTML = "Game is a draw!";
+			let drawscore = localStorage.getItem('draw'); // get the value from local storage
+			drawscore++; // increment the value
+			localStorage.setItem('draw', drawscore); // submit the value to local storage
+			
 			gameOver()
 		}
 	}
@@ -196,6 +220,7 @@ tr:nth-of-type(3) td {
 	function gameOver(){
 		// ending the game
 		// removing ALL event listeners
+		gameStats();
 		 for (var i = 0; i < fields.length; i++) {
 			fields[i].removeEventListener('click', play); 
 		}
@@ -210,7 +235,36 @@ tr:nth-of-type(3) td {
 	
 	function gameStats(){
 		// game stats using local storage
+		
+		// preparing local storage
+		if(!localStorage.getItem('player1')){
+			localStorage.setItem('player1', 0);
+			localStorage.setItem('player2', 0);
+			localStorage.setItem('draw', 0);
+		}
+		// reading from local storage
+		let player1score = localStorage.getItem('player1');
+		let player2score = localStorage.getItem('player2');
+		let drawscore = localStorage.getItem('draw');
+		
+		// displaying the values from local storage
+		p1Stats.innerHTML = player1score;
+		p2Stats.innerHTML = player2score;
+		drawStats.innerHTML = drawscore;	
 	}
+	
+	// initializing game stats
+	gameStats();
 </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
