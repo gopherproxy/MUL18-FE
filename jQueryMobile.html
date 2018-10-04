@@ -5,15 +5,42 @@
 <title>jQuery Mobile</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
-<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 <style>
 .ui-footer {
 	position: absolute !important;
 	bottom: 0;
 	width: 100%;
 }
+.hidden {
+	display: none;
+	}
 </style>
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<!-- loading formvalidator plugin (formvalidator.net) -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
+<script>
+	$( document ).ready(function() {
+		// form validering
+		// custom language object
+		var myErrorFeedback = {
+			badInt: 'Please enter a number between 0-10.'
+		}
+		// formvalidator setup function
+		$.validate({
+			// language object overwritten by custom language object
+    		language : myErrorFeedback,
+			inputParentClassOnError : 'alert alert-danger' // <- assigning Bootstrap's alert classes to error message container
+  		});
+  	//prevent form submission
+    $("form").submit(function(event){
+		console.log('Form not submitted!');
+		playGame();
+		
+        event.preventDefault();
+    });
+});	
+</script>
 </head>
 
 <body>
@@ -25,7 +52,8 @@
     <p> Welcome to our first mobile web site. It's going to be the best site
       you've ever seen. Once we get some content. And a business plan. But the
       hard part is done! </p>
-    <p><a href="#aboutpage" data-role="button" data-transition="slide">Read more about Megacorp</a></p>
+    <p><a href="#aboutpage" data-role="button" data-transition="slide">Read more about Megacorp and guess a magic number</a></p>
+    <p><a href="tic-tac-mob.html" data-role="button" data-transition="slide">Play Tic-Tac-Toe</a></p>
   </div>
   <div data-role="footer">
     <p> <i>Copyright Megacorp &copy; 2018</i> </p>
@@ -38,11 +66,82 @@
     <h1>About Megacorp</h1>
     <a href="contact.html" data-transition="slide">Contact</a> </div>
   <div role="main" class="ui-content"> <!-- main content container -->
-    <p> This is all about us!</p>
+    <!-- Number guess -->
+    <div id="output" >I am thinking of a number between 0 and 10...</div>
+      <form method="post">
+          <input id="guess" data-validation="number" data-validation-allowing="range[0;10]" data-validation-error-msg-container="#error-dialog" placeholder="Enter your guess..." autofocus>
+        <div id="error-dialog"></div>
+        <button id="play" >Guess the magic number!</button>
+      </form>
+      <!-- should be outside the form -->
+      <button id="playAgain" class="hidden">Play again!</button>
   </div>
+  <p><a href="#homepage" data-role="button" data-transition="slide" data-direction="reverse">Back to home</a></p>
   <div data-role="footer" class="ui-footer">
     <p> <i>Copyright Megacorp &copy; 2018</i> </p>
   </div>
 </div>
+<script>
+	
+//Global game variables
+var magicNumber, input, output, button, playersGuess, guessesRemaining;
+	
+magicNumber = Math.floor(Math.random() * 11); // random number 0-10
+console.log(magicNumber);
+	
+//The game "controls"
+input = document.getElementById("guess");
+output = document.getElementById("output");
+button = document.getElementById("playAgain");
+button.addEventListener('click', playAgain);
+	
+//Game state variable
+guessesRemaining = 3;
+	
+function playGame(){
+	// core functionality:
+    // handling the game statistics (guessesRemaining)
+	playersGuess = parseInt(input.value); // converting string input to number!
+	//console.log(playersGuess);
+	// countdown
+	guessesRemaining -= 1;
+	// analyzing the player's guess (i.e. the variable playersGuess!)
+	if(playersGuess < magicNumber){
+		output.innerHTML = playersGuess + ' is too low! ' + guessesRemaining + ' guesses left.';
+		// clear the input field
+		input.value = '';
+		// autofocus
+		input.focus();
+	} else if(playersGuess > magicNumber){
+		output.innerHTML = playersGuess + ' is too high!' + guessesRemaining + ' guesses left.';
+		input.value = '';
+		input.focus();
+	} else if(playersGuess === magicNumber){
+		output.innerHTML = 'You got it! ' + playersGuess + ' is the magic number!';
+		endGame();
+	} 
+	// last attempt
+	if(guessesRemaining === 0 && playersGuess === magicNumber){
+		output.innerHTML = 'Yes - in the final attempt! ' + playersGuess + ' is the magic number!';
+		endGame();
+	} else if(guessesRemaining === 0){
+		output.innerHTML = 'Sorry - no more guesses left. The magic number was ' + magicNumber + '. Game over.';
+		endGame();
+	}
+	
+}// end function
+	
+function endGame(){	
+	// disabling all game controls
+	$("#playAgain").removeClass("hidden");
+	$("#play").addClass("hidden");
+	//Disable the input field
+	input.disabled = true;
+}
+	
+function playAgain(){
+	window.location.reload(true);
+}
+</script>
 </body>
 </html>
