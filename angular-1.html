@@ -1,0 +1,60 @@
+<!doctype html>
+<html ng-app="helloWorld" lang="en">
+<head>
+<meta charset="utf-8">
+<title>Angular 1 - The basics</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.2/angular.min.js"></script>
+<script>
+	// JS object array
+	var testData = [
+		// 1 JS object in JSON
+		{
+			// Key : Value pair
+			ProductName : 'Test product 1',
+			UnitPrice : '49.75',
+			QuantityPerUnit : '100 units per box'
+		},
+		{
+			ProductName : 'Test product 2',
+			UnitPrice : '168.79',
+			QuantityPerUnit : '20 cases per pallet'
+		},
+		{
+			ProductName : 'Test product 3',
+			UnitPrice : '1268.15',
+			QuantityPerUnit : '20 per box, 20 boxes'
+		},
+		{
+			ProductName : 'Test product 4',
+			UnitPrice : '4568.10',
+			QuantityPerUnit : '65 individually wrapped'
+		}
+	]
+	
+	// a module consists of all parts of an angular app
+	angular.module('helloWorld', [])
+		// controller is one of the most important parts
+		.controller('helloController', helloController)
+	
+	// meet the "real" controller:
+	function helloController($scope){ //scope are all variables and functions available
+		// loading the test data into our application
+		$scope.productList = testData;
+	}
+	
+	
+</script>
+</head>
+
+<body ng-controller="helloController">
+ <!-- Adding an angular view -->
+ <h4>{{ productList[0] }}</h4>
+</body>
+</html>
+
+
+
+
+
+
+
