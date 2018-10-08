@@ -1,0 +1,8 @@
+<!-- Angular loop -->
+ <div ng-repeat="product in productList">
+ 	<h3>{{ product.ProductName }}</h3>
+ 	<p>{{ product.UnitPrice }}</p>
+ 	<p>{{ product.QuantityPerUnit }}</p>
+ 	<button ng-click="myFunction(product)">Check Availability</button>
+ 	<hr>
+ </div>

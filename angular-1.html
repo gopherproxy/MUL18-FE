@@ -12,22 +12,26 @@
 			// Key : Value pair
 			ProductName : 'Test product 1',
 			UnitPrice : '49.75',
-			QuantityPerUnit : '100 units per box'
+			QuantityPerUnit : '100 units per box',
+			Available : 20
 		},
 		{
 			ProductName : 'Test product 2',
 			UnitPrice : '168.79',
-			QuantityPerUnit : '20 cases per pallet'
+			QuantityPerUnit : '20 cases per pallet',
+			Available : 0
 		},
 		{
 			ProductName : 'Test product 3',
 			UnitPrice : '1268.15',
-			QuantityPerUnit : '20 per box, 20 boxes'
+			QuantityPerUnit : '20 per box, 20 boxes',
+			Available : 11
 		},
 		{
 			ProductName : 'Test product 4',
 			UnitPrice : '4568.10',
-			QuantityPerUnit : '65 individually wrapped'
+			QuantityPerUnit : '65 individually wrapped',
+			Available : 5
 		}
 	]
 	
@@ -39,7 +43,16 @@
 	// meet the "real" controller:
 	function helloController($scope){ //scope are all variables and functions available
 		// loading the test data into our application
+		// properties
 		$scope.productList = testData;
+		$scope.headline = 'Hello world!'
+		
+		// methods
+	
+		$scope.myFunction = function(prod){
+			// ternary operator: cond ? true : false;
+			alert(prod.Available > 0 ? prod.Available + ' units available' : 'Not in stock')
+		}
 	}
 	
 	
@@ -47,8 +60,10 @@
 </head>
 
 <body ng-controller="helloController">
+<h1>{{ headline }}</h1>
  <!-- Adding an angular view -->
- <h4>{{ productList[0] }}</h4>
+ <h4>Simple Angular view: {{ productList[0].ProductName }}</h4>
+<section ng-include="'partial.html'"></section>
 </body>
 </html>
 
