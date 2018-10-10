@@ -6,6 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Webdevelopment with Angular 6 and Bootstrap'; // class property type string
-	text = 'The Angular logo:';
+ title = 'Webdevelopment with Angular 6 and Bootstrap'; // class property type string
 }
