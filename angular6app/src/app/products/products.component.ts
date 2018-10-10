@@ -10,7 +10,7 @@ export class ProductsComponent implements OnInit {
   constructor() { 
     
   }
-	
+
    // JS object array as class property (NOT as a variable)
 	testData = [
 		// 1 JS object in JSON
@@ -42,7 +42,7 @@ export class ProductsComponent implements OnInit {
 	]
 
   ngOnInit() {
-	 console.log(testData[0]);
+	 console.log(this.testData[0]);
   }
 
 }
