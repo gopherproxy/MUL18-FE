@@ -1,48 +1,36 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css']
 })
+
 export class ProductsComponent implements OnInit {
 
-  constructor() { 
-    
-  }
+  constructor(private httpService: HttpClient) { }
 
-   // JS object array as class property (NOT as a variable)
-	testData = [
-		// 1 JS object in JSON
-		{
-			// Key : Value pair
-			ProductName : 'Test product 1',
-			UnitPrice : '49.75',
-			QuantityPerUnit : '100 units per box',
-			Available : 20
-		},
-		{
-			ProductName : 'Test product 2',
-			UnitPrice : '168.79',
-			QuantityPerUnit : '20 cases per pallet',
-			Available : 0
-		},
-		{
-			ProductName : 'Test product 3',
-			UnitPrice : '1268.15',
-			QuantityPerUnit : '20 per box, 20 boxes',
-			Available : 11
-		},
-		{
-			ProductName : 'Test product 4',
-			UnitPrice : '4568.10',
-			QuantityPerUnit : '65 individually wrapped',
-			Available : 5
+   // JS object array as class property
+	testData : string [];
+	
+	// (prod) is a parameter for the function
+	checkStock = function(prod){
+			// ternary operator: cond ? true : false;
+			alert(prod.Available > 0 ? prod.Available + ' units available' : 'Not in stock')
 		}
-	]
-
-  ngOnInit() {
-	 console.log(this.testData[0]);
+	
+  ngOnInit () {
+    this.httpService.get('./assets/test-data.json').subscribe(
+      data => {
+        this.testData = data as string [];	 // FILL THE ARRAY WITH DATA.
+        //  console.log(this.arrBirds[1]);
+      },
+      (err: HttpErrorResponse) => {
+        console.log (err.message);
+      }
+    );
   }
-
+// end class	
 }

@@ -1,5 +1,11 @@
 <div class="container">
-  <div class="row">
-    <h1>{{ testData[0].ProductName }}</h1>
+  <div class="row"> 
+    <!--<h1>{{ testData[0].ProductName }}</h1>-->
+    <div *ngFor="let product of testData" class="border rounded p-3 m-2">
+      <h4>{{ product.ProductName }}</h4>
+      <p>{{ product.QuantityPerUnit }}</p>
+      <p>{{ product.UnitPrice }}</p> 
+      <button (click)="checkStock(product)" class="btn btn-primary">Check Availability</button>   
+    </div>
   </div>
 </div>
