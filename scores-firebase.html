@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Firebase</title>
+<script src="https://www.gstatic.com/firebasejs/5.5.5/firebase.js"></script>
+
+</head>
+
+<body>
+<div id="output"></div>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "",
+    authDomain: "",
+    databaseURL: "",
+    projectId: "",
+    storageBucket: "",
+    messagingSenderId: ""
+  };
+  firebase.initializeApp(config);
+	
+  var database = firebase.database();
+  
+	/*database.ref('spammers/-LK6nxcfSUE3qHPhCNH1/email').on('value', function(snapshot) {
+   		console.log(snapshot.val());
+		//document.getElementById('output').innerHTML = JSON.stringify(snapshot.val());
+		document.getElementById('output').innerHTML = snapshot.val();
+  });*/
+	
+	database.ref('scores/').once('value', function(snapshot) {
+   		snapshot.forEach(function (childSnap) {
+			let allScores = childSnap.child('score').val();
+  			console.log(allScores);
+			document.getElementById('output').innerHTML += allScores + '<br>';
+ 		});
+  });
+	
+</script>
+</body>
+</html>
