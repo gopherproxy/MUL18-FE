@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <title>Firebase</title>
 <script src="https://www.gstatic.com/firebasejs/5.5.5/firebase.js"></script>
-
 </head>
 
 <body>
+<h2>All players and scores:</h2>
 <div id="output"></div>
 <script>
   // Initialize Firebase
@@ -22,18 +22,16 @@
   firebase.initializeApp(config);
 	
   var database = firebase.database();
-  
-	/*database.ref('spammers/-LK6nxcfSUE3qHPhCNH1/email').on('value', function(snapshot) {
-   		console.log(snapshot.val());
-		//document.getElementById('output').innerHTML = JSON.stringify(snapshot.val());
-		document.getElementById('output').innerHTML = snapshot.val();
-  });*/
 	
 	database.ref('scores/').once('value', function(snapshot) {
    		snapshot.forEach(function (childSnap) {
+			// storing all keys (i.e. "player1", "player2", ... )
+			let allPlayers = childSnap.key;
+			// storing all values of the child node "score"
 			let allScores = childSnap.child('score').val();
   			console.log(allScores);
-			document.getElementById('output').innerHTML += allScores + '<br>';
+			// rendering the keys and values
+			document.getElementById('output').innerHTML += allPlayers + ': ' + allScores + '<br>';
  		});
   });
 	
