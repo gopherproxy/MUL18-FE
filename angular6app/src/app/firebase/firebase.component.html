@@ -1,0 +1,17 @@
+<div class="container">
+  <div class="col-md-12">
+    <h2>All notes from Firebase Database:</h2>
+    <pre *ngFor="let item of items | async">
+	{{  item.content }}
+</pre>
+    <hr>
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <input type="text" [(ngModel)]="itemValue" placeholder="Your note..." id="item" name="item" required>
+        </div>
+      <div class="btn-group">
+        <button type="submit" class="btn btn-success">Add new note</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,10 @@
+{
+	"items" : {
+		"note1": {
+			"content" : "My very first note"
+		},
+		"note2": {
+			"content" : "My second note"
+		}
+	}
+}
