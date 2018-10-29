@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Firebase JS read and write</title>
+<script src="https://www.gstatic.com/firebasejs/5.5.6/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyB3VmDRJGhnu37E694IjKSi3O8G_3EqjQ4",
+    authDomain: "class-demo-8f773.firebaseapp.com",
+    databaseURL: "https://class-demo-8f773.firebaseio.com",
+    projectId: "class-demo-8f773",
+    storageBucket: "class-demo-8f773.appspot.com",
+    messagingSenderId: "578463913536"
+  };
+  firebase.initializeApp(config);
+</script>
+</head>
+
+<body>
+<h2>All players and scores:</h2>
+<pre id="output"></pre>
+<hr>
+<h2>Create new player:</h2>
+<form>
+	<p><input type="text" id="name" placeholder="Playername..." required></p>
+	<p><input type="number" id="score" placeholder="Score..." required></p>
+	<button type="submit" id="submit">Create new player</button>
+</form>
+<script>
+	var database = firebase.database();
+	var submitButton = document.getElementById('submit');
+	submitButton.addEventListener('click', createPlayer);
+	// read from database
+	database.ref('scores/').once('value', function(snapshot) {
+   		snapshot.forEach(function (childSnap) {
+			// storing value of the child node "name"
+			let allPlayers = childSnap.child('name').val();
+			// storing value of the child node "score"
+			let allScores = childSnap.child('score').val();
+  			console.log(allScores);
+			// rendering the keys and values
+			document.getElementById('output').innerHTML += allPlayers + ': ' + allScores + '<br>';
+ 		});
+  });
+  // write to database
+ function createPlayer(){
+	 var name = document.getElementById('name').value;
+	 var score = document.getElementById('score').value;
+	 //console.log(name + ', ' + score);
+	 // storing user input in an object
+	 var playerData = {
+		 "name" : name,
+		 "score" : score
+	 }
+	 // generate a firebase key for the object
+	 var newPlayer = database.ref('scores/').push().key;
+	 // update database with the player object
+	 database.ref('scores/' + newPlayer).update(playerData);
+ }
+  
+</script>
+</body>
+</html>
+
+
+
+
+
+

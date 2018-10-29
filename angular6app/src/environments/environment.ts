@@ -4,14 +4,13 @@
 
 export const environment = {
   production: false,
-  // firebase authentification goes here ;-):
   firebase : {
-    apiKey: "",
-    authDomain: "",
-    databaseURL: "",
-    projectId: "",
-    storageBucket: "",
-    messagingSenderId: ""
+    apiKey: "AIzaSyBRJabl6DlvlhlEL-ctUEH-xQmkZIuDURs",
+    authDomain: "angular-notes-1cfd3.firebaseapp.com",
+    databaseURL: "https://angular-notes-1cfd3.firebaseio.com",
+    projectId: "angular-notes-1cfd3",
+    storageBucket: "angular-notes-1cfd3.appspot.com",
+    messagingSenderId: "37166399840"
   }
 };
 
