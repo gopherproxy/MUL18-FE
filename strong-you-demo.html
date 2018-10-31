@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+form p {
+	display: inline-block;
+}
+label {
+	display: block;
+}
+</style>
+<title>Firebase JS: Strong You</title>
+<script src="https://www.gstatic.com/firebasejs/5.5.6/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    // firebase connection data
+  };
+  firebase.initializeApp(config);
+</script>
+</head>
+
+<body>
+<h2>Data from previous session:</h2>
+<pre id="output"></pre>
+<hr>
+<h2>Pull-ups:</h2>
+<form id="form-1">
+  <fieldset id="fs-1">
+    <legend>Set 1</legend>
+    <p>
+      <label for="prev-1">Previous</label>
+      <input type="text" id="prev-1" disabled>
+    </p>
+    <p>
+      <label for="weight-1">Kg</label>
+      <input type="number" id="weight-1" placeholder="Kg" required>
+    </p>
+    <p>
+      <label for="rep-1">Reps</label>
+      <input type="number" id="rep-1" placeholder="Reps" required>
+    </p>
+    <p>
+      <label for="done-1">Done</label>
+      <input type="checkbox" id="done-1" required>
+    </p>
+  </fieldset>
+  <fieldset id="fs-2" disabled>
+    <legend>Set 2</legend>
+    <p>
+      <input type="text" id="prev-2" disabled>
+    </p>
+    <p>
+      <input type="number" id="weight-2" placeholder="Kg" required>
+    </p>
+    <p>
+      <input type="number" id="rep-2" placeholder="Reps" required>
+    </p>
+    <p>
+      <input type="checkbox" id="done-2" required>
+    </p>
+  </fieldset>
+  <fieldset id="fs-3" disabled>
+    <legend>Set 3</legend>
+    <p>
+      <input type="text" id="prev-3" disabled>
+    </p>
+    <p>
+      <input type="number" id="weight-3" placeholder="Kg" required>
+    </p>
+    <p>
+      <input type="number" id="rep-3" placeholder="Reps" required>
+    </p>
+    <p>
+      <input type="checkbox" id="done-3" required>
+    </p>
+  </fieldset>
+  <p>
+    <input type="submit" id="next" value="NEXT">
+  </p>
+</form>
+<h2>Analytics:</h2>
+<pre id="output-1"></pre>
+<script>
+	var database = firebase.database();
+	var output = document.getElementById('output');
+	var analytics = document.getElementById('output-1');
+	
+	// form input fields and button
+	var weight_1 = document.getElementById('weight-1');
+	var rep_1 = document.getElementById('rep-1');
+	var done_1 = document.getElementById('done-1');
+	
+	var weight_2 = document.getElementById('weight-2');
+	var rep_2 = document.getElementById('rep-2');
+	var done_2 = document.getElementById('done-2');
+	
+	var weight_3 = document.getElementById('weight-3');
+	var rep_3 = document.getElementById('rep-3');
+	var done_3 = document.getElementById('done-3');
+	
+	var next = document.getElementById('next');
+	next.addEventListener('click', createEntry);
+	
+	// variables to store data from previous session
+	var wTotalprev = 0;
+	var rTotalprev = 0;
+	
+	// read previous session from database
+	database.ref('workout-log/session-01/pull-ups').on('value', function(snapshot) {
+		// variable number for dynamic instance names during looping
+		let i = 1;
+   		snapshot.forEach(function (childSnap) {
+			// storing value of the child node "kg"
+			let weight = childSnap.child('kg').val();
+			// storing value of the child node "reps"
+			let repetitions = childSnap.child('reps').val();
+			// storing value of the child node "done"
+			let done = childSnap.child('done').val();
+			// add weight and repititions to wTotalprev and rTotalprev
+			wTotalprev += parseInt(weight);
+			rTotalprev += parseInt(repetitions);
+  			//console.log(weight + ', ' + repetitions + ', ' + done + '\n');
+			// rendering the keys and values
+			output.innerHTML += weight + ' kg,  ' + repetitions + ' repetitions, ' + done + '<br>';
+			// fill formfields with data from previous session
+			this['prev-'+i].value = weight + 'kg x ' + repetitions;
+			// increment i
+			i++;
+ 		});
+});		
+	// read current session from database and analyse
+	database.ref('workout-log/session-02/pull-ups').on('value', function(snapshot) {
+		// variable number for dynamic instance names during looping
+		let i = 1;
+		// local variables to store the total weight and repetitions of the current set
+		let wTotal = 0;
+		let rTotal = 0;
+   		snapshot.forEach(function (childSnap) {
+			let weight = childSnap.child('kg').val();
+			let repetitions = childSnap.child('reps').val();
+			// transfer session data to form input fields and disable
+			this['weight-'+i].value = weight;
+			this['weight-'+i].setAttribute('disabled', 'disabled');
+			this['rep-'+i].value = repetitions;
+			this['rep-'+i].setAttribute('disabled', 'disabled');
+			this['done-'+i].setAttribute('checked', 'checked');
+			this['done-'+i].setAttribute('disabled', 'disabled');
+			// adding all weight and repetition data to local wTotal and rTotal
+			wTotal += parseInt(weight);
+			rTotal += parseInt(repetitions);
+			// increment i
+			i++;
+			// enable the next fieldset 8out of 3 possible) for user input (i is now +1 ;-))
+			if (i < 4){
+				this['fs-'+i].removeAttribute("disabled");
+			}
+ 		});
+		// analyse after (!) looping
+		console.log('previous weight: ' + wTotalprev + ', current weight: ' + wTotal + '\nprevious reps: ' + rTotalprev + ', current reps: ' + rTotal );
+		// weight and repititions increase in percentage (rounded) compared to previous session
+		let weightIncreasePct = ((wTotal * 100) / wTotalprev).toFixed(2);
+		let repIncreasePct = ((rTotal * 100) / rTotalprev).toFixed(2);
+		// creating the analytics output
+		analytics.innerHTML = 'You increased the total weight by ' + wTotal + 'kg (+ ' + weightIncreasePct + '%)' +
+		' and repetitions by ' + rTotal + 'x (+ ' + repIncreasePct + '%)';
+  });
+  // write to database
+ function createEntry(){
+	 // variables to store form input field values
+     let w,r,d;
+	 // check incoming value AND if the formfield is disabled
+	 if (weight_1.value && rep_1.value && done_1.checked === true && !weight_1.disabled){
+		w = weight_1.value;
+	 	r = rep_1.value;	
+	 } else if (weight_2.value && rep_2.value && done_2.checked === true && !weight_2.disabled){
+		w = weight_2.value;
+	 	r = rep_2.value;
+	 } else if (weight_3.value && rep_3.value && done_3.checked === true && !weight_3.disabled){
+		w = weight_3.value;
+	 	r = rep_3.value;
+	 }else {
+		 // abort and do not try to create a new entry if the button is clicked
+		 return false;
+	 }	 
+	 // storing the values in an object
+	 var entryData = {
+		 "kg" : w,
+		 "reps" : r,
+		 "done" : "true"
+	 }
+	 // generate a firebase key for the object
+	 var newEntry = database.ref('workout-log/session-02/pull-ups').push().key;
+	 // update database with the new entry
+	 database.ref('workout-log/session-02/pull-ups/' + newEntry).update(entryData);
+ }
+  
+</script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+{
+  "workout-log" : {
+    "session-01" : {
+      "pull-ups" : {
+        "-LQ6Nb74AG2ktO2sEqJb" : {
+          "done" : "true",
+          "kg" : "1",
+          "reps" : "2"
+        },
+        "-LQ9YoXqsZYMLhX-WQJ8" : {
+          "done" : "true",
+          "kg" : "3",
+          "reps" : "4"
+        },
+        "-LQ9YqAJ_9-81TTv5N6m" : {
+          "done" : "true",
+          "kg" : "5",
+          "reps" : "6"
+        }
+      },
+      "skull-chrushers" : {
+        "-LGp01default" : {
+          "done" : "true",
+          "kg" : "12",
+          "reps" : "3"
+        },
+        "-LGp02default" : {
+          "done" : "true",
+          "kg" : "14",
+          "reps" : "4"
+        },
+        "-LGp03default" : {
+          "done" : "true",
+          "kg" : "16",
+          "reps" : "3"
+        }
+      },
+      "stationary-biking" : {
+        "-LGp01default" : {
+          "done" : "true",
+          "kg" : "12",
+          "reps" : "3"
+        },
+        "-LGp02default" : {
+          "done" : "true",
+          "kg" : "14",
+          "reps" : "4"
+        },
+        "-LGp03default" : {
+          "done" : "true",
+          "kg" : "16",
+          "reps" : "3"
+        }
+      }
+    }
+  }
+}
