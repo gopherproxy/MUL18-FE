@@ -18,9 +18,13 @@ export class FirebaseComponent implements OnInit {
   items: Observable<any[]>; // creates an observable that will start listening to updates on any array	
   
   onSubmit(){
-	  
+	  this.message();
 	  this.db.list('/items').push({ content : this.itemValue})  
   }
+	
+ message(){
+	 alert('script tag in component.html');
+ }
   
   ngOnInit() {
   }
